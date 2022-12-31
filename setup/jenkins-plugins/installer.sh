@@ -4,9 +4,9 @@ set -eo pipefail
 
 JENKINS_URL='http://localhost:8080'
 
-JENKINS_CRUMB=$(curl -s --cookie-jar /tmp/cookies -u admin:admin ${JENKINS_URL}/crumbIssuer/api/json | jq .crumb -r)
+JENKINS_CRUMB=$(curl -s --cookie-jar /tmp/cookies -u jenkins:Jenkins2023 ${JENKINS_URL}/crumbIssuer/api/json | jq .crumb -r)
 
-JENKINS_TOKEN=$(curl -s -X POST -H "Jenkins-Crumb:${JENKINS_CRUMB}" --cookie /tmp/cookies "${JENKINS_URL}/me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken?newTokenName=demo-token66" -u admin:admin | jq .data.tokenValue -r)
+JENKINS_TOKEN=$(curl -s -X POST -H "Jenkins-Crumb:${JENKINS_CRUMB}" --cookie /tmp/cookies "${JENKINS_URL}/me/descriptorByName/jenkins.security.ApiTokenProperty/generateNewToken?newTokenName=demo-token66" -u jenkins:Jenkins2023 | jq .data.tokenValue -r)
 
 echo $JENKINS_URL
 echo $JENKINS_CRUMB
