@@ -29,12 +29,9 @@ pipeline {
         }
       }
     }
-    stage('SonarQube Analysis - SAST') {
+    stage('SonarQube - SAST') {
       steps {
-        def mvn = tool 'Default Maven';
-        withSonarQubeEnv() {
-          sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application"
-        }
+          sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application  -Dsonar.host.url=http://inexperts-devsecops.eastasia.cloudapp.azure.com:9000 -Dsonar.login=sqp_854312bf7f81f7c959f03f9a2a792b0eb19c6a4d"
       }
     }
     stage('Docker Build and Push') {
