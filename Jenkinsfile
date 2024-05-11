@@ -21,16 +21,18 @@ pipeline {
         }
       }
     }
-    // stage('Mutation Tests - PIT') {
-    //   steps {
-    //     sh "mvn org.pitest:pitest-maven:mutationCoverage"
-    //   }
-    //   post {
-    //     always {
-    //       pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-    //     }
-    //   }
-    // }
+    // Step 5 - Mutation Tests
+    stage('Mutation Tests - PIT') {
+      steps {
+        sh "mvn org.pitest:pitest-maven:mutationCoverage"
+      }
+      post {
+        always {
+          pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+        }
+      }
+    }
+    // Step 6 - SonarQube SAST
     // stage('SonarQube - SAST') {
     //   steps {
     //     withSonarQubeEnv('SonarQube') {
