@@ -8,17 +8,17 @@ pipeline {
         archive 'target/*.jar'
       }
     }
-    // stage('Unit Tests') {
-    //   steps {
-    //     sh "mvn test"
-    //   }
-    //   post {
-    //     always {
-    //       junit 'target/surefire-reports/*.xml'
-    //       jacoco execPattern: 'target/jacoco.exec'
-    //     }
-    //   }
-    // }
+    stage('Unit Tests- Junit & Jacoco') {
+      steps {
+        sh "mvn test"
+      }
+      post {
+        always {
+          junit 'target/surefire-reports/*.xml'
+          jacoco execPattern: 'target/jacoco.exec'
+        }
+      }
+    }
     // stage('Mutation Tests - PIT') {
     //   steps {
     //     sh "mvn org.pitest:pitest-maven:mutationCoverage"
