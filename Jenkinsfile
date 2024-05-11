@@ -43,6 +43,7 @@ pipeline {
     //     }
     //   }
     // }
+    // Step 3 - Build and Push
     stage('Docker Build and Push') {
       steps {
         withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
@@ -52,13 +53,14 @@ pipeline {
         }
       }
     }
-    // stage('Kubernetes Deployment - DEV') {
-    //   steps {
-    //     withKubeConfig([credentialsId: 'kubeconfig']) {
-    //       sh "sed -i 's#replace#itinexperts/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-    //       sh "kubectl apply -f k8s_deployment_service.yaml"
-    //     }
-    //   }
-    // }
+    // Step 4 - Kubernetes Deployment
+    stage('Kubernetes Deployment - DEV') {
+      steps {
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh "sed -i 's#replace#itinexperts/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+          sh "kubectl apply -f k8s_deployment_service.yaml"
+        }
+      }
+    }
   }
 }
