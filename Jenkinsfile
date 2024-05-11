@@ -2,12 +2,14 @@ pipeline {
   agent any
 
   stages {
+    // Step 1 - Build Artifact
     stage('Build Artifact - Maven') {
       steps {
         sh "mvn clean package -DskipTests=true"
         archive 'target/*.jar'
       }
     }
+    // Step 2 - Unit Test
     stage('Unit Tests- Junit & Jacoco') {
       steps {
         sh "mvn test"
@@ -41,15 +43,15 @@ pipeline {
     //     }
     //   }
     // }
-    // stage('Docker Build and Push') {
-    //   steps {
-    //     withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
-    //       sh 'printenv'
-    //       sh 'docker build -t itinexperts/numeric-app:""$GIT_COMMIT"" .'
-    //       sh 'docker push itinexperts/numeric-app:""$GIT_COMMIT""'
-    //     }
-    //   }
-    // }
+    stage('Docker Build and Push') {
+      steps {
+        withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+          sh 'printenv'
+          sh 'docker build -t itinexperts/numeric-app:""$GIT_COMMIT"" .'
+          sh 'docker push itinexperts/numeric-app:""$GIT_COMMIT""'
+        }
+      }
+    }
     // stage('Kubernetes Deployment - DEV') {
     //   steps {
     //     withKubeConfig([credentialsId: 'kubeconfig']) {
