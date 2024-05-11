@@ -33,18 +33,18 @@ pipeline {
       }
     }
     // Step 6 - SonarQube SAST
-    // stage('SonarQube - SAST') {
-    //   steps {
-    //     withSonarQubeEnv('SonarQube') {
-    //       sh "mvn clean verify sonar:sonar -Dsonar.projectKey=numeric-application  -Dsonar.host.url=http://inexperts-devsecops.eastasia.cloudapp.azure.com:9000 -Dsonar.login=sqp_854312bf7f81f7c959f03f9a2a792b0eb19c6a4d"
-    //     }
-    //     timeout(time: 2, unit: 'MINUTES') {
-    //       script {
-    //         waitForQualityGate abortPipeline: true
-    //       }
-    //     }
-    //   }
-    // }
+    stage('SonarQube - SAST') {
+      steps {
+        withSonarQubeEnv('SonarQube') {
+          sh "mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-apps  -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqp_10daab8b873d97c6a443fa58848793003350f5ae"
+        }
+        timeout(time: 2, unit: 'MINUTES') {
+          script {
+            waitForQualityGate abortPipeline: true
+          }
+        }
+      }
+    }
     // Step 3 - Build and Push
     stage('Docker Build and Push') {
       steps {
