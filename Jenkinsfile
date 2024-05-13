@@ -45,6 +45,17 @@ pipeline {
         }
       }
     }
+    // Step 7 - Dependency Check
+    stage('Vulnerability Scan - Docker ') {
+      steps {
+        sh "mvn dependency-check:check"
+      }
+      post {
+        always {
+          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
+      }
+    }
     // Step 3 - Build and Push
     stage('Docker Build and Push') {
       steps {
