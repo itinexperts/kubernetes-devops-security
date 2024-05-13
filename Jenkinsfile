@@ -46,14 +46,27 @@ pipeline {
       }
     }
     // Step 7 - Dependency Check
-    stage('Vulnerability Scan - Docker ') {
+    // stage('Vulnerability Scan - Docker ') {
+    //   steps {
+    //     sh "mvn dependency-check:check"
+    //   }
+    //   post {
+    //     always {
+    //       dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+    //     }
+    //   }
+    // }
+    // Step 8 - Depencency check and Trivy Scan
+    stage('Vulnerability Scan - Docker') {
       steps {
-        sh "mvn dependency-check:check"
-      }
-      post {
-        always {
-          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-        }
+        parallel(
+          "Dependency Scan": {
+            sh "mvn dependency-check:check"
+          },
+          "Trivy Scan": {
+            sh "bash trivy-docker-image-scan.sh"
+          }
+        )
       }
     }
     // Step 3 - Build and Push
