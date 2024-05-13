@@ -64,7 +64,7 @@ pipeline {
             sh "bash trivy-docker-image-scan.sh"
           }, // Step 9 - Add Conftest
           "OPA Conftest":{
-            sh "docker run --rm -v ${pwd}:/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile"
+            sh "docker run --rm -v ${pwd}/workspace/devsecops-lab-1:/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile"
           }
         )
       }
