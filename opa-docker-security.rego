@@ -86,16 +86,6 @@ forbidden_users = [
 #    msg = sprintf("Line %d: Last USER directive (USER %s) is forbidden", [i, lastuser])
 #}
 
-deny[msg] {
-    command := "user"
-    userCommands := [name | input[i].Cmd == command; name := input[i].Value]
-    lastUser := userCommands[count(userCommands)-1]
-    forbiddenUserFound := contains(lower(lastUser[_]), forbidden_users[_])
-
-    forbiddenUserFound
-    msg = sprintf("Line %d: Last %s directive (%s) is forbidden", [i, command, lastUser])
-}
-
 # Do not sudo
 deny[msg] {
     input[i].Cmd == "run"
