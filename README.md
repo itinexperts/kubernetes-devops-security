@@ -15,3 +15,6 @@
 `kubectl expose deploy node-app --name node-service --port 5000 --type ClusterIP`
 
 `curl node-service-ip:5000/plusone/99`
+
+
+replacing adoptopenjdk/openjdk8:alpine-slim to openjdk:8-jdk-alpine
