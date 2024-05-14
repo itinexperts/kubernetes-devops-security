@@ -1,6 +1,15 @@
 pipeline {
   agent any
 
+  environment {
+    deploymentName = "devsecops"
+    containerName = "devsecops-container"
+    serviceName = "devsecops-svc"
+    imageName = "itinexperts/numeric-app:${GIT_COMMIT}"
+    applicationURL = "http://localhost/"
+    applicationURI = "/increment/99"
+  }
+
   stages {
     // Step 1 - Build Artifact
     stage('Build Artifact - Maven') {
@@ -89,10 +98,20 @@ pipeline {
     // Step 4 - Kubernetes Deployment
     stage('Kubernetes Deployment - DEV') {
       steps {
-        withKubeConfig([credentialsId: 'kubeconfig']) {
-          sh "sed -i 's#replace#itinexperts/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-          sh "kubectl apply -f k8s_deployment_service.yaml"
-        }
+        parallel(
+          "Deployment": {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "bash k8s-deployment.sh"
+              //sh "sed -i 's#replace#itinexperts/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+              //sh "kubectl apply -f k8s_deployment_service.yaml"
+            }
+          },
+          "Rollout Status": {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "bash k8s-deployment-rollout-status.sh"
+            }
+          }
+        )
       }
     }
   }
