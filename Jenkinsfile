@@ -79,6 +79,13 @@ pipeline {
         }
       }
     }
+    // Step 10 - OPA Test Kubernetes Security
+    stage('Vulnerability Scan - Kubernetes') {
+      steps {
+        sh "docker run --rm -v ${pwd}/workspace/devsecops-lab-1:/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml"
+      }
+    }
+
     // Step 4 - Kubernetes Deployment
     stage('Kubernetes Deployment - DEV') {
       steps {
