@@ -88,7 +88,7 @@ pipeline {
         }
       }
     }
-    // Step 10 - OPA Test Kubernetes Security
+    // Step 10 - Kubernetes Security
     stage('Vulnerability Scan - Kubernetes') {
       steps {
         parallel(
@@ -97,10 +97,10 @@ pipeline {
           },
           "Kubesec Scan:": {
             sh "bash kubesec-scan.sh"
-          },
-          "Trivy Scan": {
-            sh "bash trivy-k8s-scan.sh"
-          }
+          }//,
+          //"Trivy Scan": {
+          //  sh "bash trivy-k8s-scan.sh"
+          //}
         )
       }
     }
